@@ -1,4 +1,4 @@
--- This disables the annoying constant messages sent by jdtls with every
+-- This disables the annoying constant notifications sent by jdtls with every
 -- keystroke.
 return {
   "folke/noice.nvim",
