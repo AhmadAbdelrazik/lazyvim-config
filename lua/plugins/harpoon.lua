@@ -10,7 +10,12 @@ return {
     local harpoon = require("harpoon")
 
     -- REQUIRED for Harpoon v2
-    harpoon:setup()
+    harpoon:setup({
+      settings = {
+        save_on_change = true,
+        save_on_toggle = true,
+      },
+    })
 
     local map = vim.keymap.set
 
