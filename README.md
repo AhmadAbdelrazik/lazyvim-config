@@ -23,6 +23,7 @@ Everything is bootstrapped from `init.lua`, which simply delegates to `lua/confi
         ├── colorscheme.lua
         ├── conform.lua
         ├── dap.lua
+        ├── dashboard.lua
         ├── disable-bufferline.lua
         ├── emmet-ls.lua
         ├── example.lua
@@ -32,7 +33,10 @@ Everything is bootstrapped from `init.lua`, which simply delegates to `lua/confi
         ├── jdtls.lua
         ├── lsp.lua
         ├── noice.lua
+        ├── smear.lua
         ├── snacks.lua
+        ├── sql.lua
+        ├── surround.lua
         └── ts-comments.lua
 ```
 
@@ -87,6 +91,7 @@ All specs live in `lua/plugins/`. Each file returns a Lua table (or list of tabl
 Customizes **[blink.cmp](https://github.com/saghen/blink.cmp)**, LazyVim's completion engine.
 
 - Overrides the completion keymap preset so `<Tab>` selects the **next** item and accepts it, `<S-Tab>` selects the previous item, and `<CR>` accepts the highlighted item (with a `<fallback>` to normal behavior when the menu isn't open).
+- `<C-j>` / `<C-k>` also navigate the completion menu next/previous (respectively), falling back to normal behavior when it's closed.
 - Enables `auto_brackets`, so accepting a function/object completion automatically inserts matching `()` / `{}` brackets.
 
 ### `colorscheme.lua`
@@ -125,6 +130,10 @@ Sets up full debugging support via **[nvim-dap](https://github.com/mfussenegger/
 
 Disables the default **[bufferline.nvim](https://github.com/akinsho/bufferline.nvim)** tab bar by setting `enabled = false` — a common choice when relying on the Snacks explorer / Harpoon for file switching instead.
 
+### `dashboard.lua`
+
+Extends **snacks.nvim**'s dashboard with a custom ASCII header, plus `Keymaps`, `Projects`, and `startup` sections.
+
 ### `emmet-ls.lua`
 
 Configures the **emmet_ls** language server (via `nvim-lspconfig`) to provide [Emmet](https://emmet.io/) HTML/CSS expansion. It is enabled only for `html` filetypes (CSS/React/JS filetypes are commented out to keep it scoped).
@@ -155,7 +164,11 @@ Adds **[nvim-jdtls](https://github.com/mfussenegger/nvim-jdtls)**, the Java lang
 
 ### `lsp.lua`
 
-Customizes `nvim-lspconfig` for the **gopls** Go language server. After attach, it disables gopls **semantic tokens** so tree-sitter highlighting is used instead of the LSP provider.
+Customizes `nvim-lspconfig` for language server setup.
+
+- After attach, disables gopls **semantic tokens** so tree-sitter highlighting is used instead of the LSP provider.
+- Registers a `<Leader>co` (Organize Imports) mapping on every `LspAttach` using `source.organizeImports`.
+- Enables extra servers: `ts_ls`, `rust_analyzer`, and `clangd`.
 
 ### `noice.lua`
 
@@ -166,6 +179,18 @@ Configures **[noice.nvim](https://github.com/folke/noice.nvim)** to route/skip m
 Configures **[snacks.nvim](https://github.com/folke/snacks.nvim)** (LazyVim's default picker/explorer/notifications kit).
 
 - The picker's `files` source shows hidden (dot) files and follows symlinks.
+
+### `smear.lua`
+
+Enables **[smear-cursor.nvim](https://github.com/sphamba/smear-cursor.nvim)** for a smooth animated cursor. Smearing works between buffers and between neighbor lines, with a custom stiffness/trailing-stiffness for a smoother trail.
+
+### `sql.lua`
+
+Fixes LazyVim's SQL completion by removing the built-in `<C-C>*` insert-mode SQL keymaps (which clash with normal typing) via a `FileType` autocmd on `sql` buffers.
+
+### `surround.lua`
+
+Adds **[nvim-surround](https://github.com/kylechui/nvim-surround)** (`^4.0.0`, lazy-loaded on `VeryLazy`) for `ys`/`cs`/`ds` surround manipulation.
 
 ### `ts-comments.lua`
 
@@ -186,6 +211,7 @@ Loads **[ts-comments.nvim](https://github.com/folke/ts-comments.nvim)** at start
 | `J`                | v    | Move selection down and keep it selected             |
 | `K`                | v    | Move selection up and keep it selected               |
 | `<C-d>`            | n    | Scroll down half a page, keep cursor centered (`zz`) |
+| `<C-t>`            | t    | Exit terminal mode (`<C-\><C-n>`)                    |
 | `<C-u>`            | n    | Scroll up half a page, keep cursor centered (`zz`)   |
 
 > Note: `<Leader>e` was swapped with `<Leader><Leader>` vs. the LazyVim defaults: explorer now lives on the double-leader, find-files on `<Leader>e`.
