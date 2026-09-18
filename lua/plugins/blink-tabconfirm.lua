@@ -7,6 +7,8 @@ return {
       ["<Tab>"] = { "accept", "select_next", "fallback" },
       ["<S-Tab>"] = { "select_prev", "fallback" },
       ["<CR>"] = { "accept", "fallback" },
+      ["<C-j>"] = { "select_next", "fallback" },
+      ["<C-k>"] = { "select_prev", "fallback" },
     },
     -- Optional: make Tab also confirm if item is selected
     completion = {
